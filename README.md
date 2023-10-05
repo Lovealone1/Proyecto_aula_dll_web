@@ -1,75 +1,31 @@
-# Nuxt 3 Minimal Starter
+Tecnologías y Herramientas:
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Utilizar Nuxt.js para el desarrollo del lado del cliente.
+Utilizar Vuetify para estilizar la interfaz.
+Emplear un sistema de gestión de base de datos, como MongoDB o PostgreSQL para almacenar información sobre productos, categorías, usuarios y pedidos.
+Utilizar Express.js para gestionar las solicitudes y operaciones en el servidor.
 
-## Setup
+Interfaz de Usuario:
+Diseñar una interfaz de usuario intuitiva y atractiva para los clientes.
+Implementar páginas y componentes para mostrar productos, categorías, detalles del producto, carrito de compras, y páginas de perfil de usuario.
 
-Make sure to install the dependencies:
+Sistema de Autenticación y Autorización:
+Implementar un sistema de autenticación para que los usuarios puedan registrarse, iniciar sesión y cerrar sesión.
+Permitir a los usuarios acceder a funciones específicas según su rol (por ejemplo, administradores y clientes).
 
-```bash
-# npm
-npm install
+Gestión de Productos:
+Implementar funcionalidades CRUD para productos (crear, leer, actualizar, eliminar) en el panel de administración.
+Permitir la asignación de productos a categorías.
 
-# pnpm
-pnpm install
+Gestión de Categorías:
+Implementar funcionalidades CRUD para categorías (crear, leer, actualizar, eliminar) en el panel de administración.
 
-# yarn
-yarn install
+Gestión de Usuarios:
+Implementar funcionalidades CRUD para usuarios (crear, leer, actualizar, eliminar) en el panel de administración.
 
-# bun
-bun install
-```
+Gestión de Pedidos:
+Implementar funcionalidades CRUD para pedidos (crear, leer, actualizar, eliminar) en el panel de administración.
+Permitir la actualización del estado del pedido.
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Carrito de Compras:
+Implementar un carrito de compras que permita a los usuarios agregar productos, eliminar productos y realizar pedidos.
