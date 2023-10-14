@@ -89,6 +89,7 @@
   justify-content: center;
   align-items: center;
   height: 150vh;
+  padding-top: 130px;
   }
   .login-container v-card {
   width: 100%;
