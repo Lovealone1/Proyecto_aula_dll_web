@@ -83,6 +83,7 @@ export default {
   components: {
     CrudProductoDialog
   },
+  
   data() {
     return {
       currency: 'usd',
