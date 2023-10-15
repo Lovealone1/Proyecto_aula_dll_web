@@ -72,7 +72,7 @@
               variant="outlined"
             ></v-file-input>
 
-            <v-btn type="submit" color="blue" block>
+            <v-btn type="submit" color="blue">
               Guardar Producto
             </v-btn>
           </form>
@@ -87,6 +87,7 @@
 
 <script>
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 export default {
   data() {
@@ -114,19 +115,32 @@ export default {
     };
   },
   methods: {
-    submitForm() {
-      const response = 'success';
+    async submitForm() {
+      try {
+        // Realizar una solicitud POST para guardar el producto
+        const response = await axios.post('http://localhost:3006/products', this.product);
+        
+        if (response.status === 201) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Producto guardado con éxito',
+            showConfirmButton: false,
+            timer: 1500
+          });
 
-      if (response === 'success') {
-        Swal.fire({
-          icon: 'success',
-          title: 'Producto guardado con éxito',
-          showConfirmButton: false,
-          timer: 1500
-        });
-
-        this.product = { ...this.initialProduct }; // Reset product fields to initial state
-      } else {
+          // Resetear campos a su estado inicial
+          this.product = { ...this.initialProduct };
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Ocurrió un error al guardar el producto',
+            text: 'Inténtelo nuevamente más tarde.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      } catch (error) {
+        console.error('Error al guardar el producto:', error);
         Swal.fire({
           icon: 'error',
           title: 'Ocurrió un error al guardar el producto',

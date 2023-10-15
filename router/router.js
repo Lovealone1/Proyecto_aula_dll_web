@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import index from './pages/index.vue';
 import Login from './pages/login.vue';
-import PanelProducto from './pages/panel_producto.vue';
+import PanelProducto from '@/components/panel_producto.vue';
 import CrearProducto from '@/components/CrearProducto.vue'; // Asegúrate de tener la ruta correcta
 import EditarProducto from '@/components/edit_producto.vue';
 Vue.use(Router);

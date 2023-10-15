@@ -24,13 +24,18 @@
           <td>{{ product.category }}</td>
           <td>{{ product.image }}</td>
           <td>
-            <v-btn icon="mdi-pencil" variant="text" @click="openEditarProducto(product.id)"></v-btn>
+            <v-btn icon="mdi-pencil" variant="text" @click="editProduct(product)"></v-btn>
             <v-btn icon="mdi-delete-off" variant="text" @click="showDeleteConfirmationDialog = true; deletingProduct = product"></v-btn>
           </td>
         </tr>
       </tbody>
     </v-table>
-    <products-edit-dialog v-if="editingProduct !== null" :dialog="isEdit" :product="editingProduct" @update="updateProduct" />
+    <products-edit-dialog
+      v-if="editingProduct != null"
+      :dialog="isEdit"
+      :product="editingProduct"
+      @update="updateProduct"
+    />
   </div>
 
   <v-dialog v-model="showDeleteConfirmationDialog" max-width="400">
@@ -43,68 +48,58 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-  <v-btn @click="loadTestData">Cargar Producto de Prueba</v-btn>
 </template>
 
 <script setup>
 import axios from "axios";
 import { ref } from "vue";
-import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2'; 
+import ProductsEditDialog from './edit_producto.vue';
+
+
+
+onBeforeMount(() => {
+  loadProducts();
+});
 
 const products = ref([]);
 const isEdit = ref(false);
 const editingProduct = ref(null);
 const showDeleteConfirmationDialog = ref(false);
-const deletingProduct = ref(null);
-const router = useRouter();
+const openDialog = ref(false);
 
-
-const editProduct = (product) => {
-  if (router) {
-    // Obtén el id del producto
-    const productId = product.id;
-    
-    // Navega a la ruta de edición
-    router.push(`/editar-producto/`);
-  } else {
-    console.error('El router es undefined');
-  }
-};
 const loadProducts = async () => {
-  const url = "http://localhost:3001/products";
+  const url = "http://localhost:3006/products";
   const { data } = await axios.get(url);
   products.value = data;
 };
 
 const deleteProduct = async (product) => {
-  const url = `http://localhost:3001/products/${product.id}`;
-  await axios.delete(url);
+  const url = `http://localhost:3006/products/${product.id}`;
+  const { data } = await axios.delete(url);
   loadProducts();
 };
 
 const deleteProductConfirmation = async (product) => {
-  if (product) {
-    const isTestProduct = product.id === 9999;
-
-    if (isTestProduct) {
-      products.value = products.value.filter(p => p.id !== product.id);
-      showDeleteConfirmationDialog.value = false;
-      showSuccessAlert();  // Mostrar alerta de éxito para producto de prueba
-    } else {
-      try {
-        await deleteProduct(product);
-        showDeleteConfirmationDialog.value = false;
-        showSuccessAlert();  // Mostrar alerta de éxito para producto real
-      } catch (error) {
-        console.error('Error al eliminar el producto:', error);
-        showErrorAlert();  // Mostrar alerta de error
-      }
-    }
+  try {
+    await deleteProduct(product);
+    showDeleteConfirmationDialog.value = false;
+    showSuccessAlert();  // Show success alert for real product
+  } catch (error) {
+    console.error('Error al eliminar el producto:', error);
+    showErrorAlert();  // Show error alert
   }
 };
 
-const updateProduct = () => {
+const editProduct = async (product)=>{
+  console.log('Editing product:', product);
+  isEdit.value=true;
+  openDialog.value = true;
+  editingProduct.value = { ...product };
+}
+
+const updateProduct = (isUpdated) => {
+  console.log(isUpdated);
   isEdit.value = false;
   editingProduct.value = null;
   loadProducts();
@@ -128,23 +123,8 @@ const showErrorAlert = () => {
     confirmButtonColor: '#d33',
     confirmButtonText: 'Cerrar'
   });
-};
 
-const loadTestData = () => {
-  const testProduct = {
-    id: 9999,
-    name: "Producto de Prueba",
-    description: "Descripción del Producto de Prueba",
-    sku: "TESTSKU123",
-    price: 99.99,
-    stock: 10,
-    category: "Prueba",
-    image: "test-image.jpg",
-  };
-  products.value.push(testProduct);
 };
-
-onBeforeMount(() => {
-  loadProducts();
-});
 </script>
+<style scoped>
+</style>

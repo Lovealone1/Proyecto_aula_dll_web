@@ -1,14 +1,14 @@
 <template>
   <v-container>
-    <v-btn color="primary" @click="dialog = true">Editar producto</v-btn>
-    <v-dialog v-model="dialog" max-width="500px">
+
+    <v-dialog v-model="openDialog" max-width="500px">
       <v-card elevation="0">
         <v-card-item>
           <v-card-title class="text-center">Editar Producto</v-card-title>
           <v-card-subtitle class="text-center">Formulario para editar el producto.</v-card-subtitle>
         </v-card-item>
         <v-card-text>
-          <form @submit.prevent="submitForm">
+          <form action="javascript:void(0)" @submit="saveProduct">
               <v-text-field
                 label="Nombre del Producto"
                 v-model="editedProduct.name"
@@ -69,7 +69,7 @@
                 variant="outlined"
               ></v-file-input>
   
-              <v-btn type="submit" color="blue" block>
+              <v-btn type="submit" color="blue">
                 Guardar Cambios
               </v-btn>
             </form>
@@ -83,18 +83,38 @@
 </template>
   
 <script>
+import axios from 'axios';
 import Swal from 'sweetalert2';
 
+const editingProduct = ref({  })
+onBeforeMount(()=> {
+  editingProduct.value = props.product
+  openDialog.value = props.dialog
+})
+const openDialog = computed(() => {
+  return props.dialog;
+});
+
+const saveProduct = async () => {
+  const url = `http://localhost:3006/products/${editingProduct.value.id}`
+  const result = await axios.put(url, editingProduct.value) 
+  console.log(result);
+  openDialog.value = false
+
+}
 export default {
   props: {
     product: {
       type: Object,
       required: true
+    },
+    dialog:{
+      type: Boolean, 
+      required: true
     }
   },
   data() {
     return {
-      dialog: false,
       editedProduct: {
         ...this.product
       },
@@ -102,29 +122,6 @@ export default {
     };
   },
   methods: {
-    submitForm() {
-      const response = 'success'; // Replace with actual API call to update the product
-
-      if (response === 'success') {
-        Swal.fire({
-          icon: 'success',
-          title: 'Producto actualizado con éxito',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        this.resetFields(); // Resetear campos después de éxito
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Ocurrió un error al actualizar el producto',
-          text: 'Inténtelo nuevamente más tarde.',
-          confirmButtonColor: '#3085d6',
-          confirmButtonText: 'Aceptar'
-        });
-      }
-
-      this.dialog = false;
-    },
     resetFields() {
       this.editedProduct = {
         name: '',
@@ -137,7 +134,7 @@ export default {
       };
     },
     closeDialog() {
-      this.dialog = false;
+      this.$emit('update:dialog', false);
       this.resetFields(); // Resetear campos al cerrar el diálogo
     }
   }
