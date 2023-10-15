@@ -71,10 +71,9 @@
               accept="image/*"
               variant="outlined"
             ></v-file-input>
-
-            <v-btn type="submit" color="blue">
-              Guardar Producto
-            </v-btn>
+            <v-card-actions>
+            <v-btn type="submit" block color="blue" variant="outlined">Guardar Producto</v-btn>
+            </v-card-actions>
           </form>
         </v-card-text>
         <v-card-actions>

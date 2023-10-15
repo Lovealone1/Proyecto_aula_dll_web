@@ -31,7 +31,7 @@
       "id": 3
     },
     {
-      "name": "12",
+      "name": "12233333",
       "description": "12",
       "sku": "12",
       "price": "12",
@@ -49,6 +49,28 @@
       "category": "Streaming",
       "image": null,
       "id": 5
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "categoria": "Teclados"
+    },
+    {
+      "id": 2,
+      "categoria": "Diademas"
+    },
+    {
+      "id": 3,
+      "categoria": "Mouses"
+    },
+    {
+      "id": 4,
+      "categoria": "Streaming"
+    },
+    {
+      "id": 5,
+      "categoria": "Accesorios"
     }
   ]
 }
