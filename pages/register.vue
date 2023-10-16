@@ -44,8 +44,7 @@
 
 <script>
 import axios from 'axios';
-
-let nextUserId = 2;  // Contador para el ID secuencial
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   data() {
@@ -69,35 +68,33 @@ export default {
       }
     },
     async register() {
-      await this.getUsers();
+      try {
+        await this.getUsers();
 
-      // Check if the email already exists
-      const emailExists = this.users.some(user => user.email === this.email);
+        const emailExists = this.users.some(user => user.email === this.email);
 
-      if (emailExists) {
-        console.error('El correo electrónico ya está registrado.');
-      } else if (this.password !== this.confirmPassword) {
-        console.error('Las contraseñas no coinciden.');
-      } else {
+        if (emailExists) {
+          console.error('El correo electrónico ya está registrado.');
+        } else if (this.password !== this.confirmPassword) {
+          console.error('Las contraseñas no coinciden.');
+        } else {
 
-        const userId = nextUserId;
+          const userId = uuidv4();
 
+          const newUser = {
+            id: userId,
+            fullName: this.fullName,
+            email: this.email,
+            password: this.password
+          };
 
-        nextUserId++;
+          await this.addUser(newUser);
 
-
-        const newUser = {
-          id: userId,
-          fullName: this.fullName,
-          email: this.email,
-          password: this.password
-        };
-
-
-        await this.addUser(newUser);
-
-        console.log('Registro exitoso:', newUser);
-        this.$router.push('/login');
+          console.log('Registro exitoso:', newUser);
+          this.$router.push('/login');
+        }
+      } catch (error) {
+        console.error('Error en el registro:', error);
       }
     },
     async addUser(user) {
@@ -114,6 +111,8 @@ definePageMeta({
   layout: "blank",
 });
 </script>
+
+
 
 <style scoped>
 .login-container {
