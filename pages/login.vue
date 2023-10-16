@@ -12,7 +12,7 @@
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
         Contraseña
 
-        <a class="text-body-2 font-weight-regular text-grey" href="#" rel="noopener noreferrer" target="_blank">
+        <a class="text-body-2 font-weight-regular text-grey" href="/contraRecuperar" rel="noopener noreferrer" target="_blank">
           Olvidaste tu contraseña?</a>
       </div>
 
