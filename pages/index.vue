@@ -45,7 +45,7 @@
       </v-col>
       <v-col>
         <v-row align="center" justify="end" >
-          <a href="#" class="icon-link" style="margin-right: 15px; color: black;">
+          <a href="/login" class="icon-link" style="margin-right: 15px; color: black;">
             <v-icon size="30">mdi-account-outline</v-icon>
           </a>
           <a href="#" class="icon-link" style="margin-right: 20px; color: black;">

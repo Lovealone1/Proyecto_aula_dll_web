@@ -97,7 +97,7 @@ export default {
         await this.addUser(newUser);
 
         console.log('Registro exitoso:', newUser);
-        this.$router.push('/');
+        this.$router.push('/login');
       }
     },
     async addUser(user) {
