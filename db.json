@@ -72,5 +72,19 @@
       "id": 5,
       "categoria": "Accesorios"
     }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "fulName": "Johnny Paz",
+      "email": "johnny@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": 2,
+      "fullName": "test",
+      "email": "test@gmail.com",
+      "password": "1234"
+    }
   ]
 }
