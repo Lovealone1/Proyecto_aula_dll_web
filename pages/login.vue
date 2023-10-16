@@ -51,7 +51,7 @@ export default {
     async getUsers() {
       try {
         const response = await axios.get('http://localhost:3006/users');
-        this.users = responsse.data;
+        this.users = response.data;
       } catch (error) {
         console.error('Error al obtener usuarios:', error);
       }
