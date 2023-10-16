@@ -74,15 +74,10 @@
     </v-row>
   </v-container>
 
-    <crud-producto-dialog ref="crudProductoDialog" />
 </template>
   
 <script>
-import CrudProductoDialog from "@/components/crud_producto.vue";
 export default {
-  components: {
-    CrudProductoDialog
-  },
   
   data() {
     return {
