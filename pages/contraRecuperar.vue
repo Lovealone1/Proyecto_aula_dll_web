@@ -25,6 +25,7 @@
   
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -35,10 +36,18 @@ export default {
     methods: {
         async resetPassword() {
             try {
-                await axios.post('http://localhost:3006/reset-password', { email: this.email });
-                console.log('Correo de restablecimiento de contraseña enviado a:', this.email);
+                const response = await axios.get('http://localhost:3006/users');
+                const users = response.data;
+                const userExists = users.some(user => user.email === this.email);
+
+                if (!userExists) {
+                    Swal.fire('Error', 'El correo electrónico no está registrado.', 'error');
+                } else {
+                    Swal.fire('Enviado', 'Correo de restablecimiento de contraseña enviado a: ' + this.email, 'success');
+                    this.$router.push('/login');
+                }
             } catch (error) {
-                console.error('Error al enviar el correo de restablecimiento de contraseña:', error);
+                Swal.fire('Error', 'Error al verificar el correo electrónico: ' + error, 'error');
             }
         },
     },

@@ -35,10 +35,10 @@
       <v-card-text class="text-center">
         <router-link to="/login">
           <a class="text-grey text-decoration-none" href="#" rel="noopener noreferrer" target="_blank">
-          ¿Ya tienes una cuenta? Inicia sesión <v-icon icon="mdi-chevron-right"></v-icon>
+            ¿Ya tienes una cuenta? Inicia sesión <v-icon icon="mdi-chevron-right"></v-icon>
           </a>
-      </router-link>
-        
+        </router-link>
+
       </v-card-text>
 
     </v-card>
@@ -47,6 +47,8 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
+
 
 let nextUserId = 3;  // Contador para el ID secuencial
 
@@ -74,33 +76,31 @@ export default {
     async register() {
       await this.getUsers();
 
-      // Check if the email already exists
-      const emailExists = this.users.some(user => user.email === this.email);
+      // Expresión regular para validar el formato del correo electrónico
+      const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
-      if (emailExists) {
-        console.error('El correo electrónico ya está registrado.');
-      } else if (this.password !== this.confirmPassword) {
-        console.error('Las contraseñas no coinciden.');
+      if (!emailRegex.test(this.email)) {
+        Swal.fire('Error', 'El formato del correo electrónico no es válido.', 'error');
       } else {
+        const emailExists = this.users.some(user => user.email === this.email);
 
-        const userId = nextUserId;
-
-
-        nextUserId++;
-
-
-        const newUser = {
-          id: userId,
-          fullName: this.fullName,
-          email: this.email,
-          password: this.password
-        };
-
-
-        await this.addUser(newUser);
-
-        console.log('Registro exitoso:', newUser);
-        this.$router.push('/');
+        if (emailExists) {
+          Swal.fire('Error', 'El correo electrónico ya está registrado.', 'error');
+        } else if (this.password !== this.confirmPassword) {
+          Swal.fire('Error', 'Las contraseñas no coinciden.', 'error');
+        } else {
+          const userId = nextUserId;
+          nextUserId++;
+          const newUser = {
+            id: userId,
+            fullName: this.fullName,
+            email: this.email,
+            password: this.password
+          };
+          await this.addUser(newUser);
+          Swal.fire('Registro exitoso', 'Te has registrado correctamente.', 'success');
+          this.$router.push('/');
+        }
       }
     },
     async addUser(user) {
@@ -111,6 +111,7 @@ export default {
         console.error('Error al agregar usuario:', error.response.data);
       }
     }
+
   }
 };
 definePageMeta({
