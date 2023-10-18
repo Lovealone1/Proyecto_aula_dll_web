@@ -3,34 +3,43 @@
     <v-img class="mx-auto my-6" max-width="228"
       src="https://www.pngkit.com/png/full/364-3642224_clarity-ecommerce-logo-logo-e-commerce-png.png"></v-img>
     <v-card class="mx-auto pa-12 pb-8" elevation="2" max-width="448" rounded="lg">
+      <form @submit.prevent="register">
+        <div class="text-subtitle-1 text-medium-emphasis">Nombre completo</div>
 
-      <div class="text-subtitle-1 text-medium-emphasis">Nombre completo</div>
+        <v-text-field v-model="fullName" density="compact" placeholder="Nombre completo"
+          prepend-inner-icon="mdi-account-outline" variant="underlined" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
-      <v-text-field v-model="fullName" density="compact" placeholder="Nombre completo"
-        prepend-inner-icon="mdi-account-outline" variant="underlined"></v-text-field>
+        <div class="text-subtitle-1 text-medium-emphasis">Correo electrónico</div>
 
-      <div class="text-subtitle-1 text-medium-emphasis">Correo electrónico</div>
+        <v-text-field
+          v-model="email"
+          density="compact"
+          placeholder="Correo electrónico"
+          prepend-inner-icon="mdi-email-outline"
+          variant="underlined"
+          :rules="emailRules"
+        ></v-text-field>
 
-      <v-text-field v-model="email" density="compact" placeholder="Correo electrónico"
-        prepend-inner-icon="mdi-email-outline" variant="underlined"></v-text-field>
+        <div class="text-subtitle-1 text-medium-emphasis">Contraseña</div>
 
-      <div class="text-subtitle-1 text-medium-emphasis">Contraseña</div>
+        <v-text-field v-model="password" :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+          :type="visible ? 'text' : 'password'" density="compact" placeholder="Ingresa tu contraseña"
+          prepend-inner-icon="mdi-lock-outline" variant="underlined"
+          @click:append-inner="visible = !visible" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
-      <v-text-field v-model="password" :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-        :type="visible ? 'text' : 'password'" density="compact" placeholder="Ingresa tu contraseña"
-        prepend-inner-icon="mdi-lock-outline" variant="underlined"
-        @click:append-inner="visible = !visible"></v-text-field>
+        <div class="text-subtitle-1 text-medium-emphasis">Confirmar Contraseña</div>
 
-      <div class="text-subtitle-1 text-medium-emphasis">Confirmar Contraseña</div>
+        <v-text-field v-model="confirmPassword" :append-inner-icon="confirmVisible ? 'mdi-eye-off' : 'mdi-eye'"
+          :type="confirmVisible ? 'text' : 'password'" density="compact" placeholder="Confirma tu contraseña"
+          prepend-inner-icon="mdi-lock-outline" variant="underlined"
+          @click:append-inner="confirmVisible = !confirmVisible" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
-      <v-text-field v-model="confirmPassword" :append-inner-icon="confirmVisible ? 'mdi-eye-off' : 'mdi-eye'"
-        :type="confirmVisible ? 'text' : 'password'" density="compact" placeholder="Confirma tu contraseña"
-        prepend-inner-icon="mdi-lock-outline" variant="underlined"
-        @click:append-inner="confirmVisible = !confirmVisible"></v-text-field>
-
-      <v-btn block class="mb-8" color="blue" size="large" variant="outlined" @click="register">
-        Registrarse
-      </v-btn>
+        <v-btn type="submit" block class="mb-8" color="blue" size="large" variant="outlined">
+          Registrarse
+        </v-btn>
+      
+      </form>
+      
 
       <v-card-text class="text-center">
         <router-link to="/login">
@@ -47,6 +56,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2'; 
 
 let nextUserId = 3;  // Contador para el ID secuencial
 
@@ -59,8 +69,23 @@ export default {
       confirmPassword: '',
       visible: false,
       confirmVisible: false,
-      users: []
+      users: [],
+      emailRules: [
+        v => !!v || 'El correo electrónico es obligatorio',
+        v => /.+@.+\..+/.test(v) || 'Correo electrónico debe contener un @'
+      ]
     };
+  },
+  computed: {
+    isFormValid() {
+      return (
+        !!this.fullName &&
+        !!this.email &&
+        !!this.password &&
+        !!this.confirmPassword &&
+        this.password === this.confirmPassword
+      );
+    }
   },
   methods: {
     async getUsers() {
@@ -72,35 +97,53 @@ export default {
       }
     },
     async register() {
-      await this.getUsers();
+  // Verificar que todos los campos estén completos
+  if (!this.fullName || !this.email || !this.password || !this.confirmPassword) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Por favor, complete todos los campos.'
+    });
+    return;
+  }
 
-      // Check if the email already exists
-      const emailExists = this.users.some(user => user.email === this.email);
+  await this.getUsers();
 
-      if (emailExists) {
-        console.error('El correo electrónico ya está registrado.');
-      } else if (this.password !== this.confirmPassword) {
-        console.error('Las contraseñas no coinciden.');
-      } else {
+  // Verificar si el correo electrónico ya está registrado
+  const emailExists = this.users.some(user => user.email === this.email);
 
-        const userId = nextUserId;
+  if (emailExists) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'El correo electrónico ya está registrado.'
+    });
+  } else if (this.password !== this.confirmPassword) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Las contraseñas no coinciden.'
+    });
+  } else {
+    const userId = nextUserId;
+    nextUserId++;
 
+    const newUser = {
+      id: userId,
+      fullName: this.fullName,
+      email: this.email,
+      password: this.password
+    };
 
-        nextUserId++;
+    await this.addUser(newUser);
 
+    Swal.fire({
+      icon: 'success',
+      title: 'Registro exitoso',
+      text: 'Usuario registrado correctamente.'
+    });
 
-        const newUser = {
-          id: userId,
-          fullName: this.fullName,
-          email: this.email,
-          password: this.password
-        };
-
-
-        await this.addUser(newUser);
-
-        console.log('Registro exitoso:', newUser);
-        this.$router.push('/');
+    this.$router.push('/');
       }
     },
     async addUser(user) {
