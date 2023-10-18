@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import index from './pages/index.vue';
 import Login from './pages/login.vue';
+import Register from './pages/register.vue';
 import PanelProducto from '/components/panel_producto.vue';
 import CrearProducto from '@/components/CrearProducto.vue'; // Asegúrate de tener la ruta correcta
 import EditarProducto from '@/components/edit_producto.vue';
@@ -32,6 +32,11 @@ export default new Router({
       path: '/editar-producto/', // Ruta para editar un producto, asumiendo que pasamos un parámetro 'id'
       name: 'editar-producto',
       component: EditarProducto,
+    },
+    {
+      path: '/register/', // Ruta para editar un producto, asumiendo que pasamos un parámetro 'id'
+      name: 'register',
+      component: Register,
     }
   ],
 });

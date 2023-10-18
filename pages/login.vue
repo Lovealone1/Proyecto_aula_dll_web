@@ -26,9 +26,12 @@
       </v-btn>
 
       <v-card-text class="text-center">
+        <router-link to="/register">
         <a class="text-grey text-decoration-none" href="./register" rel="noopener noreferrer" target="_blank">
           ¡Registrate ahora! <v-icon icon="mdi-chevron-right"></v-icon>
         </a>
+      </router-link>
+        
       </v-card-text>
 
     </v-card>
@@ -67,6 +70,7 @@ export default {
       if (foundUser) {
         console.log('Inicio de sesión exitoso para el usuario:', foundUser);
         this.$router.push('/');
+        console.log('Inicio de sesión exitoso.');
       } else {
         console.error('Credenciales incorrectas. Inicio de sesión fallido.');
       }

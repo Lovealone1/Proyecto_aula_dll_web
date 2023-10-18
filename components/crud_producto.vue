@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-btn color="primary" @click="dialog = true">
+    <v-btn color="blue" @click="dialog = true">
       Crear producto
     </v-btn>
 
@@ -126,7 +126,7 @@ export default {
             showConfirmButton: false,
             timer: 1500
           });
-
+          this.$emit('productoGuardado')
           // Resetear campos a su estado inicial
           this.product = { ...this.initialProduct };
         } else {

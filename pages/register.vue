@@ -33,9 +33,12 @@
       </v-btn>
 
       <v-card-text class="text-center">
-        <a class="text-grey text-decoration-none" href="./" rel="noopener noreferrer" target="_blank">
+        <router-link to="/">
+          <a class="text-grey text-decoration-none" href="#" rel="noopener noreferrer" target="_blank">
           ¿Ya tienes una cuenta? Inicia sesión <v-icon icon="mdi-chevron-right"></v-icon>
-        </a>
+          </a>
+      </router-link>
+        
       </v-card-text>
 
     </v-card>
@@ -45,7 +48,7 @@
 <script>
 import axios from 'axios';
 
-let nextUserId = 2;  // Contador para el ID secuencial
+let nextUserId = 3;  // Contador para el ID secuencial
 
 export default {
   data() {
@@ -105,7 +108,7 @@ export default {
         const response = await axios.post('http://localhost:3006/users', user);
         console.log('Usuario agregado:', response.data);
       } catch (error) {
-        console.error('Error al agregar usuario:', error);
+        console.error('Error al agregar usuario:', error.response.data);
       }
     }
   }
