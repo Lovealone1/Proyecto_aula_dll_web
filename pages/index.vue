@@ -1,4 +1,5 @@
-  <template>
+
+<template>
   <v-container class="header-top" fluid style="height: 50px;">
     <v-row align="center" justify="space-between">
       <v-col style="margin-top: 10px;">
@@ -18,7 +19,7 @@
           </a>
         </v-row>
       </v-col>
-
+  
       <v-col class="header-alert-news" style="margin-top: 10px; padding-right: 290px;">
         <!-- Alert message -->
         <p class="ma-0">
@@ -27,7 +28,7 @@
       </v-col>
     </v-row>
   </v-container>
-
+  
   <v-container class="header-main" style="background-color: white;">
       <v-row align="center" justify="space-between">
         <v-col style="padding-right: 250px;">
@@ -46,10 +47,10 @@
         <v-col>
           <v-row align="center" justify="end" >
             <router-link to="/login">
-              <a href="#" class="icon-link" style="margin-right: 15px; color: black;">
+            <a href="#" class="icon-link" style="margin-right: 15px; color: black;">
               <v-icon size="30">mdi-account-outline</v-icon>
-              </a>
-            </router-link>
+            </a>
+          </router-link>
             
             <a href="#" class="icon-link" style="margin-right: 20px; color: black;">
               <v-icon size="30">mdi-heart-outline</v-icon>
@@ -63,7 +64,7 @@
         </v-col>
       </v-row>
     </v-container>
-
+  
     <v-container class="nav-menu" fluid style="height: 55px;">
       <!-- Desktop Navigation Menu -->
       <v-row class="desktop-navigation-menu" justify="center" align="center">
@@ -76,7 +77,7 @@
         </v-col>
       </v-row>
     </v-container>
-
+  
   </template>
     
   <script>
@@ -119,12 +120,12 @@
     background-color: #f0f0f0; /* Add your desired background color */
     padding: 5px 10px; /* Adjust padding as needed */
     }
-
+  
     .header-alert-news {
       display: flex;
       align-items: center;
     }
-
+  
     .header-alert-news p {
       margin: 0;
       font-size: 14px;
@@ -135,15 +136,14 @@
   .nav-menu {
     background-color: #f0f0f0; 
   }
-
+  
   .nav-menu {
     padding-top: 10px;
     padding-bottom: 10px;
   }
-
+  
   .category-button {
     margin: 0 70px;
     padding: 0 -20px;
   }
     </style>
-    
