@@ -105,7 +105,7 @@
         menuOffsetY: 100,
         options: [
         { text: 'Panel de productos', link: '/PanelProducto'},
-        { text: 'Panel de usuarios', link: '/opcion2' },
+        { text: 'Panel de usuarios', link: '/PanelUsuarios' },
         { text: 'Cerrar Sesión', link: '/opcion3' }
         ],
         isMobileMenuOpen: false
