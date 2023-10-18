@@ -33,7 +33,7 @@
       </v-btn>
 
       <v-card-text class="text-center">
-        <router-link to="/">
+        <router-link to="/login">
           <a class="text-grey text-decoration-none" href="#" rel="noopener noreferrer" target="_blank">
           ¿Ya tienes una cuenta? Inicia sesión <v-icon icon="mdi-chevron-right"></v-icon>
           </a>

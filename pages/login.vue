@@ -11,9 +11,10 @@
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
         Contraseña
-
-        <a class="text-body-2 font-weight-regular text-grey" href="#" rel="noopener noreferrer" target="_blank">
+        <router-link to="/contraRecuperar">
+          <a class="text-body-2 font-weight-regular text-grey" href="#" rel="noopener noreferrer" target="_blank">
           Olvidaste tu contraseña?</a>
+        </router-link>
       </div>
 
       <v-text-field v-model="password" :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"

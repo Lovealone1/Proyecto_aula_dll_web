@@ -5,6 +5,7 @@ import Register from './pages/register.vue';
 import PanelProducto from '/components/panel_producto.vue';
 import CrearProducto from '@/components/CrearProducto.vue'; // Asegúrate de tener la ruta correcta
 import EditarProducto from '@/components/edit_producto.vue';
+import ContraRecuperar from '/pages/contraRecuperar.vue';
 Vue.use(Router);
 
 export default new Router({
@@ -37,6 +38,12 @@ export default new Router({
       path: '/register/', // Ruta para editar un producto, asumiendo que pasamos un parámetro 'id'
       name: 'register',
       component: Register,
+    },
+    {
+      path: '/contraRecuperar',
+      name: 'contraRecuperar',
+      component: ContraRecuperar,
     }
+
   ],
 });
