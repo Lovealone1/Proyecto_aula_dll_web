@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "name": "12",
+      "name": "Teclado 1",
       "description": "12",
       "sku": "12",
       "price": "12",
@@ -49,6 +49,106 @@
       "category": "Streaming",
       "image": null,
       "id": 5
+    },
+    {
+      "name": "test",
+      "description": "test",
+      "sku": "testss",
+      "price": "12",
+      "stock": "12",
+      "category": "Diademas",
+      "image": null,
+      "id": 6
+    },
+    {
+      "name": "asd",
+      "description": "asd",
+      "sku": "asd",
+      "price": "12",
+      "stock": "12",
+      "category": "Accesorios",
+      "image": null,
+      "id": 7
+    },
+    {
+      "name": "asd",
+      "description": "asd",
+      "sku": "asd",
+      "price": "12",
+      "stock": "12",
+      "category": "Accesorios",
+      "image": null,
+      "id": 8
+    },
+    {
+      "name": "asd",
+      "description": "sda",
+      "sku": "asd",
+      "price": "12",
+      "stock": "12",
+      "category": "Streaming",
+      "image": null,
+      "id": 9
+    },
+    {
+      "name": "asd",
+      "description": "asd",
+      "sku": "sda",
+      "price": "34",
+      "stock": "12",
+      "category": "Accesorios",
+      "image": null,
+      "id": 10
+    },
+    {
+      "name": "asd",
+      "description": "asd",
+      "sku": "asd",
+      "price": "34",
+      "stock": "23",
+      "category": "Mouses",
+      "image": null,
+      "id": 11
+    },
+    {
+      "name": "testasas",
+      "description": "asd",
+      "sku": "12",
+      "price": "12",
+      "stock": "12",
+      "category": "Teclados",
+      "image": null,
+      "id": 12
+    },
+    {
+      "name": "borojo",
+      "description": "asdas",
+      "sku": "asd",
+      "price": "12",
+      "stock": "12",
+      "category": "Diademas",
+      "image": null,
+      "id": 13
+    },
+    {
+      "name": "test1",
+      "description": "asd",
+      "sku": "asd",
+      "price": "12",
+      "stock": "12",
+      "category": "Diademas",
+      "image": null,
+      "id": 14
+    },
+    {
+      "name": "test",
+      "description": "asd",
+      "sku": "asd",
+      "price": "12",
+      "stock": "12",
+      "category": "Diademas",
+      "image": null,
+      "id": 15
     }
   ],
   "categories": [
@@ -71,6 +171,26 @@
     {
       "id": 5,
       "categoria": "Accesorios"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "fulName": "Johnny Paz",
+      "email": "johnny@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": 2,
+      "fullName": "test",
+      "email": "test@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": 3,
+      "fullName": "daniel",
+      "email": "daniel@gmail.com",
+      "password": "1234"
     }
   ]
 }

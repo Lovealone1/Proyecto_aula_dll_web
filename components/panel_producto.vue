@@ -1,7 +1,12 @@
 <template>
-  <div class="mt-3">
-    <h3>Listado de Productos</h3>
-    <v-table>
+  <div class="semi-header">
+    <h3>PANEL DE PRODUCTOS</h3>
+  </div>
+  <div class="mt-3 center-content">
+    <div class="crear-producto-button">
+      <crud-producto @productoGuardado="loadProducts" />
+    </div>
+    <v-table class="custom-table">
       <thead>
         <tr>
           <th class="text-left">Nombre</th>
@@ -25,7 +30,7 @@
           <td>{{ product.image }}</td>
           <td>
             <v-btn icon="mdi-pencil" variant="text" @click="editProduct(product)"></v-btn>
-            <v-btn icon="mdi-delete-off" variant="text" @click="showDeleteConfirmationDialog = true; deletingProduct = item"></v-btn>
+            <v-btn icon="mdi-delete-off" variant="text" @click="showDeleteConfirmationDialog = true; deletingProduct = product"></v-btn>
           </td>
         </tr>
       </tbody>
@@ -35,7 +40,7 @@
 
   <!-- Cuadro de diálogo de confirmación para eliminar tarea -->
   <v-dialog v-model="showDeleteConfirmationDialog" max-width="400">
-    <v-card>
+    <v-card elevation="0">
       <v-card-title class="headline">Confirmar eliminación</v-card-title>
       <v-card-text>¿Estás seguro de que deseas eliminar esta tarea?</v-card-text>
       <v-card-actions>
@@ -44,14 +49,12 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-  
 </template>
 <script setup>
 import axios from "axios";
 import { ref, onBeforeMount } from "vue";
 import Swal from 'sweetalert2';
 import EditProducto from './edit_producto.vue';
-import crear_producto from '~/components/crud_producto.vue';
 
 const products = ref([]);
 const isEdit = ref(false);
@@ -72,18 +75,17 @@ const loadProducts = async () => {
   }
 };
 
-
-
 const deleteProduct = async (product) => {
   const url = `http://localhost:3006/products/${product.id}`;
   try {
     await axios.delete(url);
-    loadProducts();
+    
     showSuccessAlert();
   } catch (error) {
     console.error('Error al eliminar el producto:', error);
     showErrorAlert();
   }
+  loadProducts();
 };
 
 const deleteProductConfirmation = async (product) => {
@@ -127,13 +129,41 @@ const showErrorAlert = () => {
 
 </script>
 <style scoped>  
-.header {
+.semi-header {
+  background-color: #f2f2f2; /* Color de fondo */
+  padding: 10px; /* Espacio interno */
+  text-align: center; /* Centrar el texto */
+}
+.center-content {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 200vh;
 }
 
+.center-table {
+  margin: 0 auto;
+}
+
+.custom-table {
+  width: 70%; /* Porcentaje de ancho según tus necesidades */
+  max-height: 528px; /* Altura máxima según tus necesidades */
+  overflow-y: auto; /* Agrega un desplazamiento vertical si es necesario */
+  border: 2px solid #000000; /* Borde de 1 píxel sólido color gris claro */
+  border-radius: 10px;
+  border-collapse: collapse; /* Colapsa los bordes de las celdas para una apariencia uniforme */
+}
+
+.crear-producto-button {
+  margin-left: 1110px;
+  margin-top: 10px; /* Agrega un margen superior para separar del borde */
+}
+.custom-table th, .custom-table td {
+  padding: 10px; /* Espacio interno dentro de las celdas */
+}
+/* Estilo para el botón de creación de producto */
 .crear-producto-card {
-  margin-left: auto; /* Esto lo moverá a la derecha */
+  margin-left: auto; /* Moverá a la derecha */
 }
 </style>
