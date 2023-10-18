@@ -48,9 +48,7 @@
 <script>
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
-
-let nextUserId = 3;  // Contador para el ID secuencial
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   data() {
@@ -89,8 +87,7 @@ export default {
         } else if (this.password !== this.confirmPassword) {
           Swal.fire('Error', 'Las contraseñas no coinciden.', 'error');
         } else {
-          const userId = nextUserId;
-          nextUserId++;
+          const userId = uuidv4();  // Generate a new UUID
           const newUser = {
             id: userId,
             fullName: this.fullName,
