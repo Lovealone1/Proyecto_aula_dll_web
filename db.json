@@ -175,22 +175,28 @@
   ],
   "users": [
     {
-      "id": 1,
-      "fulName": "Johnny Paz",
-      "email": "johnny@gmail.com",
-      "password": "1234"
-    },
-    {
       "id": 2,
       "fullName": "test",
       "email": "test@gmail.com",
+      "password": "12345"
+    },
+    {
+      "id": 5,
+      "fullName": "test2",
+      "email": "test2@gmail.com",
       "password": "1234"
     },
     {
-      "id": 3,
-      "fullName": "daniel",
-      "email": "daniel@gmail.com",
+      "id": 6,
+      "fullName": "test3",
+      "email": "test3@gmail.com",
       "password": "1234"
+    },
+    {
+      "id": 4,
+      "fullName": "daniel garcia",
+      "email": "daniel23@gmail.com",
+      "password": "1234466"
     }
   ]
 }

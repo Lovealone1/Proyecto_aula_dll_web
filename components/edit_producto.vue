@@ -3,11 +3,11 @@
       <v-dialog v-model="openDialog" max-width="500px">
           <v-card elevation="0">
               <v-card-item>
-                  <v-card-title>Edicion de tareas</v-card-title>
-                  <v-card-subtitle>Formulario para la gestión de tareas de los estudiantes.</v-card-subtitle>
+                  <v-card-title>Edicion de productos</v-card-title>
+                  <v-card-subtitle>Formulario para la gestión de productos</v-card-subtitle>
               </v-card-item>
               <v-card-text>
-                  <form action="javascript:void(0)" @submit="saveTask">
+                  <form action="javascript:void(0)" @submit="saveProduct">
 
                     <v-text-field
                       label="Nombre del Producto"
@@ -111,7 +111,7 @@ const loadCategories = async () => {
   categories.value = ['Mouses', 'Teclados', 'Diademas', 'Accesorios', 'Streaming'];
 };
 
-const saveTask = async () => {
+const saveProduct = async () => {
   const url = `http://localhost:3006/products/${editingProduct.value.id}`;
   const result = await axios.put(url, editingProduct.value);
   console.log(result);
