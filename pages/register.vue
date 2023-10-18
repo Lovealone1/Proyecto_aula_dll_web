@@ -7,26 +7,26 @@
       <div class="text-subtitle-1 text-medium-emphasis">Nombre completo</div>
 
       <v-text-field v-model="fullName" density="compact" placeholder="Nombre completo"
-        prepend-inner-icon="mdi-account-outline" variant="underlined"></v-text-field>
+        prepend-inner-icon="mdi-account-outline" variant="underlined" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis">Correo electrónico</div>
 
       <v-text-field v-model="email" density="compact" placeholder="Correo electrónico"
-        prepend-inner-icon="mdi-email-outline" variant="underlined"></v-text-field>
+        prepend-inner-icon="mdi-email-outline" variant="underlined" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis">Contraseña</div>
 
       <v-text-field v-model="password" :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="visible ? 'text' : 'password'" density="compact" placeholder="Ingresa tu contraseña"
         prepend-inner-icon="mdi-lock-outline" variant="underlined"
-        @click:append-inner="visible = !visible"></v-text-field>
+        @click:append-inner="visible = !visible" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis">Confirmar Contraseña</div>
 
       <v-text-field v-model="confirmPassword" :append-inner-icon="confirmVisible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="confirmVisible ? 'text' : 'password'" density="compact" placeholder="Confirma tu contraseña"
         prepend-inner-icon="mdi-lock-outline" variant="underlined"
-        @click:append-inner="confirmVisible = !confirmVisible"></v-text-field>
+        @click:append-inner="confirmVisible = !confirmVisible" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
       <v-btn block class="mb-8" color="blue" size="large" variant="outlined" @click="register">
         Registrarse

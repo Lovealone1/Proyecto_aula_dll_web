@@ -51,15 +51,21 @@
               <v-icon size="30">mdi-account-outline</v-icon>
             </a>
           </router-link>
-            
-            <a href="#" class="icon-link" style="margin-right: 20px; color: black;">
-              <v-icon size="30">mdi-heart-outline</v-icon>
-              <v-badge :content="heartCount"></v-badge>
-            </a>
             <a href="#" class="icon-link" style="margin-right: 15px; color: black;">
               <v-icon size="30">mdi-cart-outline</v-icon>
               <v-badge :content="bagCount"></v-badge>
             </a>
+
+            <div>
+              <v-icon @click="toggleMenu" size="30">mdi-cog</v-icon>
+              <v-menu v-model= "isMenuOpen" :offset-y="menuOffsetY" style="left: 1730px; top: 105px;">
+                <v-list elevation="2">
+                  <v-list-item v-for="(option, index) in options" :key="index" @click="handleOptionClick(option)">
+                    <v-list-item-title>{{ option.text }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </div>
           </v-row>
         </v-col>
       </v-row>
@@ -81,13 +87,9 @@
   </template>
     
   <script>
-  import CrudProductoDialog from "@/components/crud_producto.vue";
   export default {
-    
     data() {
       return {
-        currency: 'usd',
-        language: 'en-US',
         search: '',
         heartCount: 0,
         bagCount: 0,
@@ -99,8 +101,13 @@
           { title: 'Streaming', subcategories: ['Clothes Perfume', 'Deodorant', 'Flower Fragrance', 'Air Freshener'] },
           { title: '¡Ofertas!' }
         ],
-        currencyOptions: ['USD', 'EUR'],
-        languageOptions: ['English', 'Español', 'Français'],
+        isMenuOpen: false,
+        menuOffsetY: 100,
+        options: [
+        { text: 'Panel de productos', link: '/PanelProducto'},
+        { text: 'Panel de usuarios', link: '/opcion2' },
+        { text: 'Cerrar Sesión', link: '/opcion3' }
+        ],
         isMobileMenuOpen: false
       };
     },
@@ -110,7 +117,15 @@
       },
       openProductDialog() {
         this.$refs.crudProductoDialog.dialog = true;
-      }
+      },
+      toggleMenu() {
+        this.isMenuOpen = !this.isMenuOpen;
+      },
+      handleOptionClick(option) {
+      // Redirigir a la página correspondiente a la opción seleccionada
+      this.$router.push(option.link);
+      this.isMenuOpen = false;
+    }
     }
   };
   </script>
@@ -146,4 +161,8 @@
     margin: 0 70px;
     padding: 0 -20px;
   }
+
+  .v-menu {
+  right: -10 ;
+  }   
     </style>
