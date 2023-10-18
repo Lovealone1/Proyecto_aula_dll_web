@@ -7,20 +7,20 @@
       <div class="text-subtitle-1 text-medium-emphasis">Correo electrónico</div>
 
       <v-text-field v-model="email" density="compact" placeholder="Correo electrónico"
-        prepend-inner-icon="mdi-email-outline" variant="underlined"></v-text-field>
+        prepend-inner-icon="mdi-email-outline" variant="underlined" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
         Contraseña
         <router-link to="/contraRecuperar">
           <a class="text-body-2 font-weight-regular text-grey" href="#" rel="noopener noreferrer" target="_blank">
-          Olvidaste tu contraseña?</a>
+            ¿Olvidaste tu contraseña?</a>
         </router-link>
       </div>
 
       <v-text-field v-model="password" :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="visible ? 'text' : 'password'" density="compact" placeholder="Ingresa tu contraseña"
         prepend-inner-icon="mdi-lock-outline" variant="underlined"
-        @click:append-inner="visible = !visible"></v-text-field>
+        @click:append-inner="visible = !visible" :rules="[v => !!v || 'Este campo es obligatorio']"></v-text-field>
 
       <v-btn block class="mb-8" color="blue" size="large" variant="outlined" @click="login">
         Iniciar sesión
@@ -28,11 +28,11 @@
 
       <v-card-text class="text-center">
         <router-link to="/register">
-        <a class="text-grey text-decoration-none" href="./register" rel="noopener noreferrer" target="_blank">
-          ¡Registrate ahora! <v-icon icon="mdi-chevron-right"></v-icon>
-        </a>
-      </router-link>
-        
+          <a class="text-grey text-decoration-none" href="./register" rel="noopener noreferrer" target="_blank">
+            ¡Registrate ahora! <v-icon icon="mdi-chevron-right"></v-icon>
+          </a>
+        </router-link>
+
       </v-card-text>
 
     </v-card>
@@ -41,6 +41,8 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
+
 
 export default {
   data() {
@@ -71,11 +73,21 @@ export default {
       if (foundUser) {
         console.log('Inicio de sesión exitoso para el usuario:', foundUser);
         this.$router.push('/');
-        console.log('Inicio de sesión exitoso.');
+        Swal.fire(
+          '¡Inicio de sesión exitoso!',
+          'Has iniciado sesión correctamente.',
+          'success'
+        )
       } else {
         console.error('Credenciales incorrectas. Inicio de sesión fallido.');
+        Swal.fire(
+          'Error',
+          'Credenciales incorrectas. Inicio de sesión fallido.',
+          'error'
+        )
       }
     },
+
   },
 };
 definePageMeta({
