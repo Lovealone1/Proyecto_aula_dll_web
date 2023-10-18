@@ -197,6 +197,12 @@
       "fullName": "daniel garcia",
       "email": "daniel23@gmail.com",
       "password": "1234466"
+    },
+    {
+      "id": "99cb325d-6568-4de3-b9d5-d76e1bac5725",
+      "fullName": "sad",
+      "email": "asd@gmail.com",
+      "password": "@"
     }
   ]
 }
