@@ -70,6 +70,7 @@
               v-model="product.image"
               accept="image/*"
               variant="outlined"
+              @change="uploadImage"
             ></v-file-input>
             <v-card-actions>
             <v-btn type="submit" block color="blue" variant="outlined">Guardar Producto</v-btn>
@@ -113,6 +114,7 @@ export default {
       categories: ['Mouses', 'Teclados', 'Diademas', 'Accesorios','Streaming'] // Ejemplo de categorías
     };
   },
+
   methods: {
     async submitForm() {
       try {
@@ -149,10 +151,28 @@ export default {
         });
       }
 
+      await this.uploadImage();
+
       this.dialog = false;
+    },
+
+    async uploadImage() {
+      const formData = new FormData();
+      formData.append('image', this.product.image);
+      try {
+        const response = await axios.post('http://localhost:3006/products', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        console.log('Image uploaded successfully:', response.data);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
     }
   }
 };
+
 </script>
 
 <style scoped>

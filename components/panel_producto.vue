@@ -27,7 +27,7 @@
           <td>{{ product.price }}</td>
           <td>{{ product.stock }}</td>
           <td>{{ product.category }}</td>
-          <td>{{ product.image }}</td>
+          <td><img :src="product.image_url" alt="Product Image" style="max-width: 100px;"></td>
           <td>
             <v-btn icon="mdi-pencil" variant="text" @click="editProduct(product)"></v-btn>
             <v-btn icon="mdi-delete-off" variant="text" @click="showDeleteConfirmationDialog = true; deletingProduct = product"></v-btn>
