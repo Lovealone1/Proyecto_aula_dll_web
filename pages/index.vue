@@ -214,6 +214,13 @@
   }
 
   .v-menu {
+
     right: -10;
   }
+    right: -10 ;
+  }   
 </style>
+
+
+
+
