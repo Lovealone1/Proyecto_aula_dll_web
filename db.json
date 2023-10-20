@@ -139,16 +139,6 @@
       "category": "Diademas",
       "image": null,
       "id": 14
-    },
-    {
-      "name": "test",
-      "description": "asd",
-      "sku": "asd",
-      "price": "12",
-      "stock": "12",
-      "category": "Diademas",
-      "image": null,
-      "id": 15
     }
   ],
   "categories": [
@@ -175,12 +165,6 @@
   ],
   "users": [
     {
-      "id": 2,
-      "fullName": "test",
-      "email": "test@gmail.com",
-      "password": "12345"
-    },
-    {
       "id": 5,
       "fullName": "test2",
       "email": "test2@gmail.com",
@@ -203,6 +187,18 @@
       "fullName": "sad",
       "email": "asd@gmail.com",
       "password": "@"
+    },
+    {
+      "id": "139b9705-980a-4bfb-aa87-080b1dea7e10",
+      "fullName": "asd",
+      "email": "sad@gmail.com",
+      "password": "123"
+    },
+    {
+      "id": "ae747ef9-9862-4d12-a774-40145c963f1b",
+      "fullName": "Carlos Ramirez",
+      "email": "daniel22@gmail.com",
+      "password": "1234567"
     }
   ]
 }

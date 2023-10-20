@@ -1,4 +1,3 @@
-
 <template>
   <v-container class="header-top" fluid style="height: 50px;">
     <v-row align="center" justify="space-between">
@@ -83,29 +82,35 @@
         </v-col>
       </v-row>
     </v-container>
-  
+    <Banner />
+    <Featured />
+    <Footer />
   </template>
     
   <script>
+  import axios from 'axios';
   export default {
     data() {
       return {
         search: '',
+        showSearch: false,
+        products: [],
+        filteredProducts: [],
         heartCount: 0,
         bagCount: 0,
         categories: [
-          { title: 'Teclados', subcategories: ['Shirt', 'Shorts & Jeans', 'Safety Shoes', 'Wallet'] },
-          { title: 'Diademas', subcategories: ['Shirt', 'Shorts & Jeans', 'Safety Shoes', 'Wallet'] },
-          { title: 'Mouses', subcategories: ['Dress & Frock', 'Earrings', 'Necklace', 'Makeup Kit'] },
-          { title: 'Accesorios', subcategories: ['Earrings', 'Couple Rings', 'Necklace', 'Bracelets'] },
-          { title: 'Streaming', subcategories: ['Clothes Perfume', 'Deodorant', 'Flower Fragrance', 'Air Freshener'] },
-          { title: '¡Ofertas!' }
+          { title: 'Desktops', subcategories: ['Shirt', 'Shorts & Jeans', 'Safety Shoes', 'Wallet'] },
+          { title: 'Displays', subcategories: ['Shirt', 'Shorts & Jeans', 'Safety Shoes', 'Wallet'] },
+          { title: 'Laptops', subcategories: ['Dress & Frock', 'Earrings', 'Necklace', 'Makeup Kit'] },
+          { title: 'Smartwatchs', subcategories: ['Earrings', 'Couple Rings', 'Necklace', 'Bracelets'] },
+          { title: 'Smartphones', subcategories: ['Clothes Perfume', 'Deodorant', 'Flower Fragrance', 'Air Freshener'] },
+          { title: '¡Spooky Sale!' }
         ],
         isMenuOpen: false,
         menuOffsetY: 100,
         options: [
         { text: 'Panel de productos', link: '/PanelProducto'},
-        { text: 'Panel de usuarios', link: '/opcion2' },
+        { text: 'Panel de usuarios', link: '/PanelUsuarios' },
         { text: 'Cerrar Sesión', link: '/opcion3' }
         ],
         isMobileMenuOpen: false
@@ -125,44 +130,90 @@
       // Redirigir a la página correspondiente a la opción seleccionada
       this.$router.push(option.link);
       this.isMenuOpen = false;
-    }
-    }
-  };
-  </script>
+      },
+      async searchProducts() {
+      try {
+        if (this.searchTerm !== '') {
+          const response = await axios.get(
+            `https://api.techspecs.io/v4/all/products`, 
+            {
+              params: {
+                apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImN1c19PcWtISXQzTDg1RWF2RSIsIm1vZXNpZlByaWNpbmdJZCI6InByaWNlXzFNUXF5dkJESWxQbVVQcE1SWUVWdnlLZSIsImlhdCI6MTY5Nzc0NzE0M30.WEwpneXEW5pGsLfIVa01Upjut6kO5UZuf_E-uVIDWRE', // Replace with your TechSpecs API key
+                limit: 100,
+                nameStartsWith: this.searchTerm, 
+              },
+            }
+          );
+
+          this.filteredProducts = response.data.data.results; // Adjust as needed based on the API response structure
+        } else {
+          this.filteredProducts = this.products;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    toggleSearch() {
+      this.showSearch = !this.showSearch;
+      if (!this.showSearch) {
+        this.searchTerm = '';
+      }
+    },
+  },
+
+  watch: {
+    searchTerm(newTerm, oldTerm) {
+      if (newTerm === '') {
+        this.filteredProducts = this.products;
+      }
+    },
+  },
+
+  beforeCreate() {
+    axios.get('https://api.techspecs.io/products?eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImN1c19PcWtISXQzTDg1RWF2RSIsIm1vZXNpZlByaWNpbmdJZCI6InByaWNlXzFNUXF5dkJESWxQbVVQcE1SWUVWdnlLZSIsImlhdCI6MTY5Nzc0NzE0M30.WEwpneXEW5pGsLfIVa01Upjut6kO5UZuf_E-uVIDWRE&limit=100') // Replace with the correct TechSpecs API endpoint and your API key
+      .then((response) => {
+        this.products = response.data.data.results; 
+        this.filteredProducts = this.products;
+        console.log(response.data.data.results);
+      })
+      .catch((error) => console.error(error));
+  },
+};
+</script>
     
-    <style scoped>
-    .header-top {
-    background-color: #f0f0f0; /* Add your desired background color */
-    padding: 5px 10px; /* Adjust padding as needed */
-    }
-  
-    .header-alert-news {
-      display: flex;
-      align-items: center;
-    }
-  
-    .header-alert-news p {
-      margin: 0;
-      font-size: 14px;
-    }
-    .nav-menu .desktop-navigation-menu {
-    height: 100%; /* Establece la altura al 100% del contenedor */
-    }
-  .nav-menu {
-    background-color: #f0f0f0; 
+<style scoped>
+  .header-top {
+    background-color: #f0f0f0;
+    padding: 5px 10px;
   }
-  
+
+  .header-alert-news {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-alert-news p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .nav-menu .desktop-navigation-menu {
+    height: 100%;
+  }
+
   .nav-menu {
+    background-color: #f0f0f0;
     padding-top: 10px;
     padding-bottom: 10px;
   }
-  
+
   .category-button {
     margin: 0 70px;
     padding: 0 -20px;
   }
 
   .v-menu {
-  right: -10 ;
-  }   
-    </style>
+    right: -10;
+  }
+</style>

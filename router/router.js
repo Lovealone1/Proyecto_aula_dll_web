@@ -6,13 +6,15 @@ import PanelProducto from '@/pages/panelProducto.vue';
 import CrearProducto from '@/components/CrearProducto.vue'; // Asegúrate de tener la ruta correcta
 import EditarProducto from '@/components/edit_producto.vue';
 import ContraRecuperar from '/pages/contraRecuperar.vue';
+import HomeView from '../views/HomeView.vue'
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/index', // Redirige la página de inicio al login
+      name: 'home',
+      component: HomeView
     },
     {
       path: '/login',
