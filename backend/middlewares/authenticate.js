@@ -4,6 +4,7 @@ var secret = 'daniel'
 
 exports.decodeToken = function(req, res, next) {
     if(!req.headers.authorization){
+        console.log(res);
         return res.status(403).send({message: 'NoHeadersError'});
     }
 
