@@ -1,5 +1,7 @@
 var Producto = require('../models/producto');
-var slugify = require('slugify')
+var slugify = require('slugify');
+var fs = require('fs');
+var path = require('path');
 
 const registro_producto_admin = async function(req,res){
     if(req.user){
@@ -30,6 +32,36 @@ const registro_producto_admin = async function(req,res){
     }
 }
 
+const listar_productos_admin = async function(req, res){
+    if(req.user){
+        let filtro = req.params['filtro']
+        let productos = await Producto.find({
+            $or: [
+                {titulo: new RegExp(filtro,'i')},
+                {categoria: new RegExp(filtro,'i')},
+            ]
+        });
+        res.status(200).send(productos)
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const obtener_portada_producto = async function(req, res){
+    let img = req.params['img']
+    fs.stat('./uploads/productos/'+img,function(err){
+        if(err){
+            let path_img = './uploads/default.jpg';
+            res.status(200).sendFile(path.resolve(path_img));
+        }else{
+            let path_img = './uploads//productos/'+img;
+            res.status(200).sendFile(path.resolve(path_img));
+        }
+    });
+}
+
 module.exports = {
     registro_producto_admin,
+    listar_productos_admin,
+    obtener_portada_producto
 }
