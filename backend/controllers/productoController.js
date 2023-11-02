@@ -1,4 +1,5 @@
 var Producto = require('../models/producto');
+var Variacion = require('../models/variacion');
 var slugify = require('slugify');
 var fs = require('fs');
 var path = require('path');
@@ -40,7 +41,7 @@ const listar_productos_admin = async function(req, res){
                 {titulo: new RegExp(filtro,'i')},
                 {categoria: new RegExp(filtro,'i')},
             ]
-        });
+        }).sort({createdAt:-1});
         res.status(200).send(productos)
     }else{
         res.status(500).send({data:undefined,message: 'ErrorToken'});
@@ -101,6 +102,7 @@ const actualizar_producto_admin = async function(req,res){
                             categoria: data.categoria,
                             descripcion: data.descripcion,
                             estado: data.estado, 
+                            str_variedad: data.str_variedad,
                             descuento: data.descuento, 
                             portada: data.portada,
                         });
@@ -117,6 +119,7 @@ const actualizar_producto_admin = async function(req,res){
                              categoria: data.categoria,
                              descripcion: data.descripcion,
                              estado: data.estado, 
+                             str_variedad: data.str_variedad,
                              descuento: data.descuento, 
                          });
                          res.status(200).send({data:producto});
@@ -143,6 +146,7 @@ const actualizar_producto_admin = async function(req,res){
                         categoria: data.categoria,
                         descripcion: data.descripcion,
                         estado: data.estado, 
+                        str_variedad: data.str_variedad,
                         descuento: data.descuento, 
                         portada: data.portada,
                     });
@@ -159,6 +163,7 @@ const actualizar_producto_admin = async function(req,res){
                          categoria: data.categoria,
                          descripcion: data.descripcion,
                          estado: data.estado, 
+                         str_variedad: data.str_variedad,
                          descuento: data.descuento, 
                      });
                      res.status(200).send({data:producto});
@@ -172,10 +177,54 @@ const actualizar_producto_admin = async function(req,res){
     }
 }
 
+const registro_variacion_producto = async function(req,res){
+    if(req.user){
+        let data = req.body;
+
+        let variacion = Variacion.create(data);
+        res.status(200).send({data:variacion});
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const obtener_variedades_producto = async function(req,res){
+    if(req.user){
+        let id = req.params['id'];
+
+        let variedades = await Variacion.find({producto: id}).sort({stock: -1});
+        res.status(200).send(variedades);
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const eliminar_variedad_producto = async function(req,res){
+    if(req.user){
+        let id = req.params['id'];
+
+        let reg = await Variacion.findById({_id:id});
+
+        if (req.stock == 0) {
+            let variacion = await Variacion.findOneAndRemove({_id: id});
+            res.status(200).send(variacion);
+        }else{
+            res.status(200).send({data:undefined,message: 'No se puede eliminar esta variación'});
+        }
+
+
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
 module.exports = {
     registro_producto_admin,
     listar_productos_admin,
     obtener_portada_producto,
     obtener_producto_admin,
-    actualizar_producto_admin
+    actualizar_producto_admin,
+    registro_variacion_producto,
+    obtener_variedades_producto,
+    eliminar_variedad_producto
 }
