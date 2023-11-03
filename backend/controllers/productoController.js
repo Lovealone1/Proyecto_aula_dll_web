@@ -1,5 +1,7 @@
 var Producto = require('../models/producto');
 var Variacion = require('../models/variacion');
+var Ingreso = require('../models/ingreso');
+var Ingreso_detalle = require('../models/ingreso_detalle');
 var slugify = require('slugify');
 var fs = require('fs');
 var path = require('path');
@@ -218,6 +220,86 @@ const eliminar_variedad_producto = async function(req,res){
     }
 }
 
+const listar_productos_activos = async function(req, res){
+    if(req.user){
+        let productos = await Producto.find({estado: true
+        }).sort({createdAt:-1});
+        res.status(200).send(productos)
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const registro_ingreso_admin = async function(req, res){
+    if(req.user){
+        let data = req.body; 
+        try {
+            let reg_ingresos = await Ingreso.find({}).sort({createdAt: -1});
+
+            if (reg_ingresos.length == 0) {
+                data.serie = 1;
+            }else{
+                data.serie = reg_ingresos[0].serie + 1;
+            }
+
+            let detalles = JSON.parse(data.detalles); 
+
+            var img_path = req.files.documento.path
+            var str_img = img_path.split('\\');
+            var str_documento = str_img[2];
+            data.documento = str_documento;
+            data.usuario = req.user.sub;
+
+            let ingreso = await Ingreso.create(data);
+
+            for (var item of detalles) {
+                item.ingreso = ingreso._id;
+                await Ingreso_detalle.create(item);    
+                
+                //STOCKS
+                let variedad = await Variacion.findById({_id: item.variedad});
+                await Variacion.findByIdAndUpdate({_id: item.variedad},{
+                    stock: parseInt(variedad.stock) + parseInt(item.cantidad)
+                });
+
+                let producto = await Producto.findById({_id: item.producto});
+                await Producto.findByIdAndUpdate({_id: item.producto},{
+                    stock: parseInt(producto.stock) + parseInt(item.cantidad)
+                });
+
+                //MARGEN DE GANANCIA 
+                if (producto.stock >= 1) {
+                    let subtotal_residual = producto.precio * producto.stock;
+                    let ganancia = Math.ceil((item.precio_unidad * data.ganancia)/100);
+                    let subtotal_ingreso = (parseFloat(item.precio_unidad) + parseFloat(ganancia))*item.cantidad;
+
+                    let cantidades = parseInt(producto.stock) + parseInt(item.cantidad);
+                    let subtotales = parseFloat(subtotal_residual) + parseFloat(subtotal_ingreso);
+
+                    console.log(subtotales + ' ' + cantidades);
+
+                    let precio_equilibro = Math.ceil(subtotales/cantidades);
+
+                    await Producto.findByIdAndUpdate({_id: item.producto},{
+                        precio: precio_equilibro
+                    });
+                }else{
+                    let ganancia = Math.ceil((item.precio_unidad * data.ganancia)/100);
+                    await Producto.findByIdAndUpdate({_id: item.producto},{
+                        precio: parseFloat(item.precio_unidad) + parseFloat(ganancia)
+                    });
+                }
+            }
+
+        res.status(200).send(ingreso);
+        } catch (error) {
+            
+            res.status(200).send({message: 'No se pudo registrar el ingreso'});
+        }
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
 module.exports = {
     registro_producto_admin,
     listar_productos_admin,
@@ -226,5 +308,7 @@ module.exports = {
     actualizar_producto_admin,
     registro_variacion_producto,
     obtener_variedades_producto,
-    eliminar_variedad_producto
+    eliminar_variedad_producto,
+    listar_productos_activos,
+    registro_ingreso_admin
 }
