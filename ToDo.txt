@@ -1,0 +1,1 @@
+Agregar spinner en las vistas de cargar productos
