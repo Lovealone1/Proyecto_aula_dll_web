@@ -5,6 +5,7 @@ var ProductoSchema = Schema({
     titulo: {type: String, required: true},
     slug: {type: String, required: true},
     categoria: {type: String, required: true},
+    subcategoria: {type: String, required: true},
     precio: {type: Number,default:0, required: true},
     descripcion: {type: String, required: true},
     portada: {type: String, required: true},
