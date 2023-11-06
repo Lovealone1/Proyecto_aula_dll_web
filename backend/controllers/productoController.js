@@ -1,4 +1,6 @@
 var Producto = require('../models/producto');
+var Categoria = require('../models/categoria');
+var Subcategoria = require('../models/subcategoria');
 var Galeria = require('../models/galeria');
 var Variacion = require('../models/variacion');
 var Ingreso = require('../models/ingreso');
@@ -6,6 +8,7 @@ var Ingreso_detalle = require('../models/ingreso_detalle');
 var slugify = require('slugify');
 var fs = require('fs');
 var path = require('path');
+
 
 const registro_producto_admin = async function(req,res){
     if(req.user){
@@ -373,7 +376,107 @@ const eliminar_galeria_producto_admin = async function(req,res){
     }
 }
 
+const crear_categoria_admin = async function(req,res){
+    if(req.user){
+        let data = req.body;
+        try {
+            var reg = await Categoria.find({titulo:data.titulo});
 
+        if(reg.length == 0){
+            data.slug = slugify(data.titulo).toLowerCase();
+            var categoria = await Categoria.create(data);
+            res.status(200).send(categoria);
+        }else{
+            res.status(200).send({data:undefined,message: 'La categoria ya existe.'});   
+        }
+        } catch (error) {
+            res.status(200).send({data:undefined,message: 'Ocurrio un error durante el proceso.'});   
+        }
+
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const listar_categorias_admin = async function(req,res){
+    if(req.user){
+
+        var regs = await Categoria.find().sort({titulo:-1});
+        var categorias = [];
+
+        for(var item of regs){
+            var subcategorias = await Subcategoria.find({categoria: item._id});
+            var productos = await Producto.find({categoria: item.titulo})
+            categorias.push({
+                categoria: item,
+                subcategorias,
+                nproductos: productos.length
+            })
+        }
+        res.status(200).send(categorias);
+
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const crear_subcategoria_admin = async function(req,res){
+    if(req.user){
+        let data = req.body;
+
+        try {
+            var reg = await Subcategoria.find({titulo:data.titulo});
+
+            if(reg.length == 0){
+                var subcategoria = await Subcategoria.create(data);
+                res.status(200).send(subcategoria);
+            }else{
+                res.status(200).send({data:undefined,message: 'La subcategoria ya existe.'});   
+            }
+        } catch (error) {
+            res.status(200).send({data:undefined,message: 'Ocurrió un eror durante el proceso.'});  
+        }
+
+        
+
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const eliminar_subcategoria_admin = async function(req,res){
+    if(req.user){
+        let id = req.params['id'];
+
+        var reg = await Subcategoria.findOneAndRemove({_id:id});
+        res.status(200).send(reg);
+
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const cambiar_estado_producto_admin = async function(req, res){
+    if(req.user){
+        let id = req.params['id'];
+        let data = req.body;
+
+        let nuevo_estado = false; 
+
+        if(data.estado){
+            nuevo_estado = false; 
+        }else{
+            nuevo_estado = true; 
+        }
+
+        let categoria = await Categoria.findByIdAndUpdate({_id: id,},{
+            estado: nuevo_estado
+        });
+        res.status(200).send(categoria);
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
 module.exports = {
     registro_producto_admin,
     listar_productos_admin,
@@ -388,5 +491,10 @@ module.exports = {
     subir_imagen_producto_admin,
     obtener_galeria_producto,
     obtener_galeria_producto_admin,
-    eliminar_galeria_producto_admin
+    eliminar_galeria_producto_admin,
+    crear_categoria_admin,
+    listar_categorias_admin,
+    crear_subcategoria_admin,
+    eliminar_subcategoria_admin,
+    cambiar_estado_producto_admin
 }
