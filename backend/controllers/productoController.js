@@ -477,6 +477,8 @@ const cambiar_estado_producto_admin = async function(req, res){
         res.status(500).send({data:undefined,message: 'ErrorToken'});
     }
 }
+
+
 module.exports = {
     registro_producto_admin,
     listar_productos_admin,
