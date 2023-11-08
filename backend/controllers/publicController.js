@@ -2,6 +2,7 @@ var Producto = require('../models/producto');
 var Categoria = require('../models/categoria');
 var Subcategoria = require('../models/subcategoria');
 var Variacion = require('../models/variacion');
+var Galeria = require('../models/galeria');
 
 const obtener_nuevos_productos = async function (req,res) {
     var productos = await Producto.find({estado: true}).sort({createdAt: -1}).limit(4);
@@ -9,7 +10,7 @@ const obtener_nuevos_productos = async function (req,res) {
 }
 
 const obtener_productos_recomendados = async function (req,res) {
-    var productos = await Producto.find({estado: true}).limit(8);
+    var productos = await Producto.find({estado: true}).limit(4);
     res.status(200).send(productos);
 }
 
@@ -54,9 +55,27 @@ const listar_categorias_public = async function(req,res){
 
 }
 
+const obtener_producto_slug = async function(req,res){
+    var slug = req.params['slug'];
+    var producto = await Producto.findOne({slug: slug});
+    var variaciones = await Variacion.find({producto: producto._id});
+    var galeria = await Galeria.find({producto: producto._id});
+
+    res.status(200).send({producto,galeria,variaciones});
+}
+
+const obtener_producto_categoria = async function(req,res){
+    var categoria = req.params['categoria'];
+    var productos = await Producto.find({categoria: categoria}).limit(6);
+
+    res.status(200).send({productos});
+}
+
 module.exports = {
     obtener_nuevos_productos,
     obtener_productos_recomendados,
     obtener_productos_shop,
-    listar_categorias_public
+    listar_categorias_public,
+    obtener_producto_slug,
+    obtener_producto_categoria
 }

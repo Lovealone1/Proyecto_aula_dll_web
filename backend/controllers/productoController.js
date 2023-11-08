@@ -85,100 +85,99 @@ const obtener_producto_admin = async function(req, res){
 
 const actualizar_producto_admin = async function(req,res){
     if(req.user){
-        let data = req.body; 
+        let data = req.body;
         let id = req.params['id'];
 
-        let productos = await Producto.find({titulo: data.titulo});
+
+        let productos = await Producto.find({titulo:data.titulo});
         console.log(productos.length);
 
-        if (productos.length>=1) {
+        if(productos.length>= 1){
             if(productos[0]._id == id){
                 if(req.files){
-                    //Registro exitoso
-                    var img_path = req.files.portada.path
+                    //REGISTRO PRODUCTO
+                    var img_path = req.files.portada.path;
                     var str_img = img_path.split('\\');
                     var str_portada = str_img[2];
     
-                    data.portada = str_portada; 
+                    ///
+    
+                    data.portada = str_portada;
                     data.slug = slugify(data.titulo);
                     
                     try {
-                        let producto = await Producto.findByIdAndUpdate({_id: id},{
-                            titulo: data.titulo, 
-                            categoria: data.categoria,
-                            subcategoria: data.subcategoria,
+                        let producto = await Producto.findByIdAndUpdate({_id:id},{
+                            titulo: data.titulo,
+                            categoria:data.categoria,
                             descripcion: data.descripcion,
-                            estado: data.estado, 
-                            str_variedad: data.str_variedad,
-                            descuento: data.descuento, 
+                            estado: data.estado,
+                            descuento: data.descuento,
                             portada: data.portada,
                         });
                         res.status(200).send({data:producto});
                     } catch (error) {
-                        res.status(200).send({data:undefined,message: 'No se pudo guardar el producto'});
+                        res.status(200).send({data:undefined,message: 'No se pudo crear el producto.'});   
                     }
                 }else{
+    
                      data.slug = slugify(data.titulo);
                      
                      try {
-                         let producto = await Producto.findByIdAndUpdate({_id: id},{
-                             titulo: data.titulo, 
-                             categoria: data.categoria,
-                             subcategoria: data.subcategoria,
+                         let producto = await Producto.findByIdAndUpdate({_id:id},{
+                             titulo: data.titulo,
+                             categoria:data.categoria,
                              descripcion: data.descripcion,
-                             estado: data.estado, 
-                             str_variedad: data.str_variedad,
-                             descuento: data.descuento, 
+                             estado: data.estado,
+                             descuento: data.descuento
                          });
                          res.status(200).send({data:producto});
                      } catch (error) {
-                         res.status(200).send({data:undefined,message: 'No se pudo guardar el producto'});
+                         res.status(200).send({data:undefined,message: 'No se pudo crear el producto.'});   
                      }
                 }
             }else{
-                res.status(200).send({data:undefined,message: 'El producto ya existe'});
+                res.status(200).send({data:undefined,message: 'El titulo de producto ya existe.'});   
             }
         }else{
             if(req.files){
-                //Registro exitoso
-                var img_path = req.files.portada.path
+                //REGISTRO PRODUCTO
+                var img_path = req.files.portada.path;
                 var str_img = img_path.split('\\');
                 var str_portada = str_img[2];
 
-                data.portada = str_portada; 
+                ///
+
+                data.portada = str_portada;
                 data.slug = slugify(data.titulo);
                 
                 try {
-                    let producto = await Producto.findByIdAndUpdate({_id: id},{
-                        titulo: data.titulo, 
-                        categoria: data.categoria,
-                        subcategoria: data.subcategoria,
+                    let producto = await Producto.findByIdAndUpdate({_id:id},{
+                        titulo: data.titulo,
+                        categoria:data.categoria,
                         descripcion: data.descripcion,
-                        estado: data.estado, 
-                        str_variedad: data.str_variedad,
-                        descuento: data.descuento, 
+                        estado: data.estado,
+                        descuento: data.descuento,
                         portada: data.portada,
                     });
                     res.status(200).send({data:producto});
                 } catch (error) {
-                    res.status(200).send({data:undefined,message: 'No se pudo guardar el producto'});
+                    res.status(200).send({data:undefined,message: 'No se pudo crear el producto.'});   
                 }
             }else{
+
                  data.slug = slugify(data.titulo);
                  
                  try {
-                     let producto = await Producto.findByIdAndUpdate({_id: id},{
-                         titulo: data.titulo, 
-                         categoria: data.categoria,
-                         subcategoria: data.subcategoria,
+                     let producto = await Producto.findByIdAndUpdate({_id:id},{
+                         titulo: data.titulo,
+                         categoria:data.categoria,
                          descripcion: data.descripcion,
-                         estado: data.estado, 
-                         str_variedad: data.str_variedad,
-                         descuento: data.descuento, 
+                         estado: data.estado,
+                         descuento: data.descuento
                      });
                      res.status(200).send({data:producto});
                  } catch (error) {
-                     res.status(200).send({data:undefined,message: 'No se pudo guardar el producto'});
+                     res.status(200).send({data:undefined,message: 'No se pudo crear el producto.'});   
                  }
             }
         }
@@ -204,6 +203,25 @@ const obtener_variedades_producto = async function(req,res){
 
         let variedades = await Variacion.find({producto: id}).sort({stock: -1});
         res.status(200).send(variedades);
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const eliminar_producto_admin = async function(req,res){
+    if(req.user){
+        let id = req.params['id'];
+
+        let reg = await Variacion.findById({_id:id});
+
+        if (req.stock == 0) {
+            let variacion = await Variacion.findOneAndRemove({_id: id});
+            res.status(200).send(variacion);
+        }else{
+            res.status(200).send({data:undefined,message: 'No se puede eliminar esta variación'});
+        }
+
+
     }else{
         res.status(500).send({data:undefined,message: 'ErrorToken'});
     }
