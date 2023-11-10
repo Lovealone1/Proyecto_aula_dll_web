@@ -6,4 +6,8 @@ var authenticate = require('../middlewares/cauthenticate');
 api.post('/crear_producto_carrito',authenticate.decodeToken, customerController.crear_producto_carrito);
 api.get('/obtener_carrito_cliente',authenticate.decodeToken, customerController.obtener_carrito_cliente);
 api.delete('/eliminar_producto_carrito/:id',authenticate.decodeToken, customerController.eliminar_producto_carrito);
+
+api.post('/crear_direccion_cliente',authenticate.decodeToken, customerController.crear_direccion_cliente);
+api.get('/obtener_direcciones_cliente',authenticate.decodeToken, customerController.obtener_direcciones_cliente);
+api.delete('/eliminar_direcciones_cliente/:id',authenticate.decodeToken, customerController.eliminar_direcciones_cliente);
 module.exports = api
