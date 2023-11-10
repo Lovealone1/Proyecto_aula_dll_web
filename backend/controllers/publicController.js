@@ -71,6 +71,7 @@ const obtener_producto_categoria = async function(req,res){
     res.status(200).send({productos});
 }
 
+
 module.exports = {
     obtener_nuevos_productos,
     obtener_productos_recomendados,
