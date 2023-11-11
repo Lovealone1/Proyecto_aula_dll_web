@@ -1,6 +1,8 @@
 var Carrito = require('../models/carrito');
 var Variacion = require('../models/variacion');
 var Direccion = require('../models/direccion');
+var Venta = require('../models/venta');
+var Venta_detalle = require('../models/venta_detalle');
 
 const crear_producto_carrito = async function(req,res){
     if(req.user){
@@ -76,11 +78,53 @@ const eliminar_direcciones_cliente = async function(req,res){
     }
 }
 
+const validar_payment_id_venta = async function(req,res){
+    if(req.user){
+        let payment_id = req.params['payment_id'];
+        let venta = await Venta.find({transaccion: payment_id});
+        res.status(200).send(venta);
+    }else{
+         res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
+const crear_venta_cliente = async function(req,res){
+    if(req.user){
+        let data = req.body;
+        data.year = new Date().getFullYear();
+        data.month = new Date().getMonth()+1;
+        data.day = new Date().getDate();
+        data.estado = 'Pagado';
+        let ventas = await Venta.find().sort({createdAt: -1});
+        if (ventas.length == 0) {
+            data.serie = 1;
+        }else{
+            data.serie = ventas[0].serie + 1;
+        }
+        let venta = await Venta.create(data)
+        for(var item of data.detalles){
+            item.year = new Date().getFullYear();
+            item.month = new Date().getMonth()+1;
+            item.day = new Date().getDate();
+            item.venta = venta._id;
+            await Venta_detalle.create(item);
+        }
+
+        await Carrito.deleteMany({cliente: data.cliente});
+
+        res.status(200).send(venta);
+    }else{
+         res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
+
 module.exports = {
     crear_producto_carrito,
     obtener_carrito_cliente,
     eliminar_producto_carrito,
     crear_direccion_cliente,
     obtener_direcciones_cliente,
-    eliminar_direcciones_cliente
+    eliminar_direcciones_cliente,
+    validar_payment_id_venta,
+    crear_venta_cliente
 }
