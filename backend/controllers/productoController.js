@@ -105,10 +105,11 @@ const actualizar_producto_admin = async function(req,res){
                     data.portada = str_portada;
                     data.slug = slugify(data.titulo);
                     
+                    let categoria = data.categoria[0];
                     try {
                         let producto = await Producto.findByIdAndUpdate({_id:id},{
                             titulo: data.titulo,
-                            categoria:data.categoria,
+                            categoria:categoria,
                             descripcion: data.descripcion,
                             estado: data.estado,
                             descuento: data.descuento,
@@ -116,7 +117,7 @@ const actualizar_producto_admin = async function(req,res){
                         });
                         res.status(200).send({data:producto});
                     } catch (error) {
-                        res.status(200).send({data:undefined,message: 'No se pudo crear el producto.'});   
+                        res.status(500).send(error);   
                     }
                 }else{
     
