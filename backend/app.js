@@ -1,4 +1,5 @@
 var express = require('express');
+var helmet = require('helmet');
 var mongoose = require('mongoose');
 var bodyparser = require('body-parser');
 var port = process.env.PORT || 4201; 
@@ -36,6 +37,9 @@ mongoose.connect('mongodb://127.0.0.1:27017')
   });
 
   app.use((req,res,next)=>{
+    var scriptSrc = ["'self'", "'unsafe-inline'", 'https://http2.mlstatic.com/analytics/ga/mco-mp-analytics.min.js'];
+  
+    res.header('Content-Security-Policy', `script-src ${scriptSrc.join(' ')}`);
     res.header('Access-Control-Allow-Origin','*'); 
     res.header('Access-Control-Allow-Headers','Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Request-Method');
     res.header('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');

@@ -13,4 +13,7 @@ api.delete('/eliminar_direcciones_cliente/:id',authenticate.decodeToken, custome
 
 api.get('/validar_payment_id_venta/:payment_id',authenticate.decodeToken, customerController.validar_payment_id_venta);
 api.post('/crear_venta_cliente',authenticate.decodeToken, customerController.crear_venta_cliente);
+
+api.get('/obtener_informacion_venta/:id',authenticate.decodeToken, customerController.obtener_informacion_venta);
+api.get('/obtener_ventas_cliente',authenticate.decodeToken, customerController.obtener_ventas_cliente);
 module.exports = api
