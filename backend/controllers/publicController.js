@@ -3,6 +3,7 @@ var Categoria = require('../models/categoria');
 var Subcategoria = require('../models/subcategoria');
 var Variacion = require('../models/variacion');
 var Galeria = require('../models/galeria');
+var Review = require('../models/review');
 
 const obtener_nuevos_productos = async function (req,res) {
     var productos = await Producto.find({estado: true}).sort({createdAt: -1}).limit(4);
@@ -71,12 +72,18 @@ const obtener_producto_categoria = async function(req,res){
     res.status(200).send({productos});
 }
 
+const obtener_reviews_producto = async function(req,res){
+    var id = req.params['id'];
+    var reviews = await Review.find({producto: id}).populate('cliente');
 
+    res.status(200).send(reviews);
+}
 module.exports = {
     obtener_nuevos_productos,
     obtener_productos_recomendados,
     obtener_productos_shop,
     listar_categorias_public,
     obtener_producto_slug,
-    obtener_producto_categoria
+    obtener_producto_categoria,
+    obtener_reviews_producto
 }

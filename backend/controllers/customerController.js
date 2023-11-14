@@ -3,6 +3,7 @@ var Variacion = require('../models/variacion');
 var Direccion = require('../models/direccion');
 var Venta = require('../models/venta');
 var Venta_detalle = require('../models/venta_detalle');
+var Review = require('../models/review');
 
 const crear_producto_carrito = async function(req,res){
     if(req.user){
@@ -133,7 +134,17 @@ const obtener_informacion_venta = async function(req,res){
     if(req.user){
         let id = req.params['id'];
         let venta = await Venta.findById({_id:id}).populate('cliente').populate('direccion');
-        let detalles = await Venta_detalle.find({venta:id}).populate('producto').populate('variacion');
+        let regs = await Venta_detalle.find({venta:id}).populate('producto').populate('variacion');
+        var detalles = [];
+
+        for(var item of regs){
+            var reviews = await Review.find({cliente: item.cliente, producto: item.producto._id});
+            detalles.push({
+                detalle: item,
+                reviews
+            });
+        }
+
         if(req.user.sub == venta.cliente._id){
             res.status(200).send({venta,detalles});
         }else{
@@ -155,6 +166,26 @@ const obtener_ventas_cliente = async function(req,res){
         res.status(500).send({data:undefined,message: 'ErrorToken'});
     }
 }
+
+const registrar_review_cliente = async function(req,res){
+   
+    if(req.user){
+        let data = req.body;
+        data.cliente = req.user.sub;
+        
+        let regs = await Review.find({cliente: data.cliente, producto: data.producto});
+ 
+        if (regs.length == 0) {
+            let review = await Review.create(data);
+            res.status(200).send(review);
+        } else {
+            res.status(200).send({data:undefined,message: 'Usted ya emitió una review acerca de este producto'});
+        }
+
+    }else{
+        res.status(500).send({data:undefined,message: 'ErrorToken'});
+    }
+}
 module.exports = {
     crear_producto_carrito,
     obtener_carrito_cliente,
@@ -165,5 +196,6 @@ module.exports = {
     validar_payment_id_venta,
     crear_venta_cliente,
     obtener_informacion_venta,
-    obtener_ventas_cliente
+    obtener_ventas_cliente,
+    registrar_review_cliente
 }
