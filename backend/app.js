@@ -22,6 +22,7 @@ var usuario_router = require('./routes/usuario');
 var producto_router = require('./routes/producto');
 var public_router = require('./routes/public');
 var customer_router = require('./routes/customer');
+var venta_router = require('./routes/venta');
 
 app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyparser.json({limit: '50mb', extended: true}));
@@ -52,4 +53,5 @@ app.use('/api',usuario_router);
 app.use('/api',producto_router);
 app.use('/api',public_router);
 app.use('/api',customer_router);
+app.use('/api',venta_router);
 module.exports = app;
