@@ -32,4 +32,4 @@ npm install
 npm run serve
 ```
 
-
+# MongoDB Compass localhost:27017
