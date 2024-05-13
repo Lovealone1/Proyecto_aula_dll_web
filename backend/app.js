@@ -7,6 +7,8 @@ const {createServer} = require('http');
 const { Server } = require("socket.io");
 
 var app = express();
+app.listen(process.env.PORT || 4201);
+console.log('Server on port', process.env.PORT || 4201);
 const httpServer = createServer(app);
 const io = new Server(httpServer, { 
   cors: {origin: '*'}
@@ -27,15 +29,15 @@ var venta_router = require('./routes/venta');
 app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyparser.json({limit: '50mb', extended: true}));
 
-mongoose.connect('mongodb://127.0.0.1:27017')
-  .then(() => {
-    httpServer.listen(port, function () {
-      console.log("Servidor corriendo en port " + port);
-    });
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+const connectDB = async () => {
+  try {
+    await mongoose.connect('mongodb+srv://dan:admin123@cluster0.ktrer9z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+    console.log('MongoDB connected');
+  } catch (error) {
+    console.log(error);
+  }
+}
+connectDB();
 
   app.use((req,res,next)=>{
     var scriptSrc = ["'self'", "'unsafe-inline'", 'https://http2.mlstatic.com/analytics/ga/mco-mp-analytics.min.js'];
